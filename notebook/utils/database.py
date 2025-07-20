@@ -90,7 +90,20 @@ class DBManager:
         """
         table_name = stock.replace('.', '_')
         try:
-            df.to_sql(f"t_{table_name}", self.conn, if_exists='replace', index_label='Date')
+            create_table_sql = f"""
+            CREATE TABLE IF NOT EXISTS t_{table_name} (
+                Date TEXT UNIQUE,
+                Open REAL,
+                High REAL,
+                Low REAL,
+                Close REAL,
+                Volume REAL
+            )
+            """
+            self.conn.execute(create_table_sql)
+            self.conn.commit()
+            # 再 append 新資料
+            df.to_sql(f"t_{table_name}", self.conn, if_exists='append', index_label='Date')
             self.conn.commit()
             print(f"[DB] 已儲存 {stock} -> t_{table_name}")
         except Exception as e:
@@ -118,7 +131,7 @@ class DBManager:
                 start_date = end_date - relativedelta(days=days)
             else:
                 # 預設為 1 年
-                start_date = end_date - relativedelta(years=1)
+                start_date = end_date - relativedelta(years=5)
             
             # 將日期轉換為字串，符合 SQL 格式
             start_date_str = start_date.strftime('%Y-%m-%d')

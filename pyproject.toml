@@ -1,0 +1,18 @@
+[project]
+name = "finance-playground"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "certifi>=2025.7.14",
+    "jupyter>=1.1.1",
+    "nbstripout>=0.8.1",
+    "pandas>=2.3.1",
+    "yfinance>=0.2.65",
+]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.29.5",
+]
